@@ -1,0 +1,46 @@
+<!-- Weather Web -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Weather App</h1>
+        </header>
+
+        <section id="weather-section">
+            <h2>Current Weather</h2>
+            <div class="weather-info">
+                <div id="location"></div>
+                <div id="temperature"></div>
+                <div id="conditions"></div>
+                <div id="humidity"></div>
+                <div id="wind-speed"></div>
+            </div>
+            <div class="search-box">
+                <input type="text" id="city" placeholder="Enter City" />
+                <button onclick="getWeatherByCity()">Get Weather</button>
+            </div>
+        </section>
+
+        <footer>
+            <p>Weather data from OpenWeatherMap</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+<footer>
+    <h2>Created by: Prodigy Infotech's Intern Divyam Lathiya</h2>
+</footer>
+
+</html>
