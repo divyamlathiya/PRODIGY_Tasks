@@ -1,9 +1,9 @@
-// Function to detect scroll and change navbar style
-window.onscroll = function () {
-    let navbar = document.getElementById("navbar");
-    if (window.scrollY > 50) {
-        navbar.classList.add("scrolled");
+// Menu Toggle Functionality for Mobile/Tablet Devices
+document.getElementById("menu-icon").addEventListener("click", function () {
+    const menu = document.getElementById("navbar").querySelector("ul");
+    if (menu.style.display === "block") {
+        menu.style.display = "none";
     } else {
-        navbar.classList.remove("scrolled");
+        menu.style.display = "block";
     }
-};
+});
