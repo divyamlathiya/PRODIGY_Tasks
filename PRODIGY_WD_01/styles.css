@@ -133,6 +133,29 @@ p {
     }
 }
 
+/* Mobile and Tablet Styles */
+@media (max-width: 768px) {
+
+    /* Hide the <p> tag on mobile and tablet */
+    #navbar p {
+        display: none;
+    }
+}
+
+/* Desktop and Larger Screens */
+@media (min-width: 769px) {
+
+    /* Display the <p> tag on desktop and larger screens */
+    #navbar p {
+        font-size: 1rem;
+        /* Adjust font size */
+        color: #fff;
+        /* Set text color */
+        margin-left: 20px;
+        /* Add space to the left */
+    }
+}
+
 /* Footer */
 footer {
     text-align: center;
