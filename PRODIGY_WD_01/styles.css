@@ -56,7 +56,6 @@ p {
 
 #logo img {
     width: 100px;
-    /* Adjust this size as needed */
     height: 70px;
 }
 
@@ -89,4 +88,68 @@ p {
 .scrolled {
     background: linear-gradient(135deg, #2c3e50, #16a085);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile and Tablet Styles */
+#menu-icon {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+}
+
+.bar {
+    width: 30px;
+    height: 4px;
+    background-color: white;
+}
+
+@media (max-width: 768px) {
+    #navbar ul {
+        display: none;
+        width: 100%;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        flex-direction: column;
+        padding: 0;
+    }
+
+    #navbar li {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    #navbar a {
+        padding: 15px 30px;
+        display: block;
+    }
+
+    #menu-icon {
+        display: flex;
+    }
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #2575fc;
+    color: white;
+}
+
+footer h2 {
+    margin: 0;
+}
+
+/* Section Styles */
+section {
+    transition: all 0.3s ease-in-out;
+}
+
+section:hover {
+    background-color: #f0f0f0;
 }
