@@ -44,7 +44,7 @@ p {
     top: 0;
     left: 0;
     width: 100%;
-    background: linear-gradient(135deg, #2c3e50, #34495e);
+    background: linear-gradient(35deg, #2c3e50, #34495e);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     display: flex;
@@ -131,10 +131,11 @@ p {
     #menu-icon {
         display: flex;
     }
-}
 
-/* Mobile and Tablet Styles */
-@media (max-width: 768px) {
+    /* When the active class is added, show the menu */
+    #navbar ul.active {
+        display: flex;
+    }
 
     /* Hide the <p> tag on mobile and tablet */
     #navbar p {
@@ -144,15 +145,10 @@ p {
 
 /* Desktop and Larger Screens */
 @media (min-width: 769px) {
-
-    /* Display the <p> tag on desktop and larger screens */
     #navbar p {
         font-size: 1rem;
-        /* Adjust font size */
         color: #fff;
-        /* Set text color */
         margin-left: 20px;
-        /* Add space to the left */
     }
 }
 
