@@ -9,3 +9,6 @@
 **PRODIGY_WD_04**: Personal Portfolio Site
 
 **PRODIGY_WD_05**: Weather Web Application
+
+---
+Author: **Divyam Lathiya**
