@@ -4,7 +4,7 @@ const menu = document.getElementById('menu');
 const navLinks = document.querySelectorAll('#navbar ul li a');
 
 /*
-   * @author Divyam Lathiya 
+   @author Divyam Lathiya 
 */
 
 // Toggle the menu when the menu icon is clicked
