@@ -3,6 +3,10 @@ const menuIcon = document.getElementById('menu-icon');
 const menu = document.getElementById('menu');
 const navLinks = document.querySelectorAll('#navbar ul li a');
 
+/*
+   * @author Divyam Lathiya 
+*/
+
 // Toggle the menu when the menu icon is clicked
 menuIcon.addEventListener('click', () => {
     menu.classList.toggle('active');
