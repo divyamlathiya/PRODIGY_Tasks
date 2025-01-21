@@ -10,6 +10,10 @@ const lapBtn = document.getElementById('lapBtn');
 const lapList = document.getElementById('lapList');
 const toggleModeBtn = document.getElementById('toggleMode');
 
+/*
+    * @author Divyam Lathiya 
+*/
+
 // Sound Effects
 const startSound = new Audio('start-sound.mp3');
 const lapSound = new Audio('lap-sound.mp3');
