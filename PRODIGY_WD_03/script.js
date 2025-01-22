@@ -4,12 +4,26 @@ const TicTac = {
     gameOver: false,
     scores: { X: 0, O: 0, tie: 0 },
     difficulty: "medium",
+    mode: "friend", // friend mode by default
 
     init() {
         this.cBoard();
         document.getElementById("reset").addEventListener("click", () => this.reset());
-        document.getElementById("difficulty").addEventListener("change", e => this.difficulty = e.target.value);
+        document.getElementById("friendMode").addEventListener("click", () => this.setMode("friend"));
+        document.getElementById("aiMode").addEventListener("click", () => this.setMode("ai"));
         this.updateScoreboard();
+    },
+
+    setMode(mode) {
+        this.mode = mode;
+        this.gameOver = false;
+        this.state = Array(9).fill(null);
+        this.cPlayer = "X";
+        this.cBoard();
+        document.getElementById("turnButton").textContent = "Player X's turn";
+        this.updateTurnIndicator();
+        document.getElementById("friendMode").style.backgroundColor = mode === "friend" ? "black" : "";
+        document.getElementById("aiMode").style.backgroundColor = mode === "ai" ? "black" : "";
     },
 
     cBoard() {
@@ -40,14 +54,19 @@ const TicTac = {
             this.uMessage(`Player ${this.cPlayer} wins!`);
             this.scores[this.cPlayer]++;
             this.gameOver = true;
+            this.updateTurnIndicator();
         } else if (this.state.every(cell => cell)) {
             this.uMessage("It's a tie!");
             this.scores.tie++;
             this.gameOver = true;
+            this.updateTurnIndicator();
         } else {
             this.cPlayer = this.cPlayer === "X" ? "O" : "X";
             this.uMessage(`Player ${this.cPlayer}'s turn`);
-            if (this.cPlayer === "O" && !this.gameOver) this.computerMove();
+            this.updateTurnIndicator();
+            if (this.cPlayer === "O" && !this.gameOver && this.mode === "ai") {
+                this.computerMove();
+            }
         }
         this.updateScoreboard();
     },
@@ -70,10 +89,30 @@ const TicTac = {
         this.cPlayer = "X";
         this.gameOver = false;
         this.cBoard();
+        document.getElementById("turnButton").textContent = "Player X's turn";
+        this.updateTurnIndicator();
+        document.getElementById("friendMode").style.backgroundColor = "";
+        document.getElementById("aiMode").style.backgroundColor = "";
     },
 
     uMessage(msg) {
         document.getElementById("message").textContent = msg;
+    },
+
+    updateTurnIndicator() {
+        const turnButton = document.getElementById("turnButton");
+
+        if (this.gameOver) {
+            turnButton.textContent = "Game Over";
+            turnButton.style.backgroundColor = "lightcoral";
+        } else {
+            turnButton.textContent = `Player ${this.cPlayer}'s turn`;
+            if (this.cPlayer === "X") {
+                turnButton.style.backgroundColor = "#008080"; // Green for Player X
+            } else {
+                turnButton.style.backgroundColor = "#deb887"; // Blue for Player O
+            }
+        }
     },
 
     updateScoreboard() {
@@ -104,6 +143,7 @@ const TicTac = {
                 this.uMessage(`Player ${this.cPlayer}'s turn`);
             }
             this.updateScoreboard();
+            this.updateTurnIndicator();
         }, 500);
     },
 
@@ -159,5 +199,4 @@ const TicTac = {
     }
 };
 
-// Start the game
 TicTac.init();
