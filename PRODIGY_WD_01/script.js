@@ -12,7 +12,7 @@ const navbar = document.querySelector('.navbar');
 window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
         navbar.style.boxShadow = '0px 4px 8px rgba(0, 0, 0, 0.3)';
-        navbar.style.background = '#2d3e50'; // Darker shade
+        // navbar.style.background = '#2d3e50'; // Darker shade
     } else {
         navbar.style.background = '#1e293b'; // Original color
         navbar.style.boxShadow = 'none';
