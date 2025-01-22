@@ -13,19 +13,6 @@
 <body>
     <div id="main">
         <h1>TIC TAC TOE</h1>
-
-        <!-- Game Mode Buttons -->
-        <div id="mode-selection">
-            <button id="friendMode" class="mode-button">Play with Friend</button>
-            <button id="aiMode" class="mode-button">Play with AI</button>
-        </div>
-
-        <!-- Turn Indicator -->
-        <div id="turn-indicator">
-            <button id="turnButton" class="turn-button">Player X's turn</button>
-        </div>
-
-        <!-- Game Instructions and Board -->
         <p id="ins">
             Tap on a box to play.<br><br>
             <b>Player X</b> starts first, followed by <b>Player O</b>.
@@ -34,14 +21,17 @@
         <br>
         <button id="reset" class="reset">RESET</button>
         <p id="message" class="message"></p>
+        <!-- Player Turn Buttons -->
+        <div id="turnButtons">
+            <button id="playerXTurn" class="turnButton">Player X's Turn</button>
+            <button id="playerOTurn" class="turnButton" disabled>Player O's Turn</button>
+        </div>
     </div>
-
-    <!-- Footer -->
-    <footer>
-        <h2>Created by: Prodigy Infotech's Intern Divyam Lathiya</h2>
-    </footer>
-
     <script src="script.js"></script>
 </body>
+
+<footer>
+    <h2>Created by: Prodigy Infotech's Intern Divyam Lathiya</h2>
+</footer>
 
 </html>
