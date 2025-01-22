@@ -14,18 +14,23 @@ function getWeatherByCity() {
     fetch(url)
         .then(response => response.json())
         .then(data => {
+            if (data.cod === "404") {
+                alert('City not found!'); // Alert if city is not found
+                return;
+            }
             displayWeather(data); // Display weather data if request is successful
         })
         .catch(error => {
             alert('Could not fetch weather data. Please try again.'); // Handle any errors during fetch
-            console.error(error);
+            console.error('Error fetching weather data:', error);
         });
 }
 
 // Display weather information
 function displayWeather(data) {
-    if (data.cod === "404") {
-        alert('City not found!'); // Alert if city is not found
+    // Check if weather data is available
+    if (!data || !data.main || !data.weather || !data.wind) {
+        alert('Error displaying weather data.'); 
         return;
     }
 
@@ -35,16 +40,25 @@ function displayWeather(data) {
     const conditions = document.getElementById('conditions');
     const humidity = document.getElementById('humidity');
     const windSpeed = document.getElementById('wind-speed');
+    const icon = document.getElementById('weather-icon');
 
     location.textContent = `${data.name}, ${data.sys.country}`;
     temperature.textContent = `Temperature: ${data.main.temp}°C`;
     conditions.textContent = `Conditions: ${data.weather[0].description}`;
     humidity.textContent = `Humidity: ${data.main.humidity}%`;
     windSpeed.textContent = `Wind Speed: ${data.wind.speed} m/s`;
+
+    // Optional: Show an icon representing the weather condition
+    const iconUrl = `https://openweathermap.org/img/wn/${data.weather[0].icon}.png`;
+    icon.src = iconUrl; // Set weather icon based on response
+    icon.alt = data.weather[0].description; // Add alt text for accessibility
 }
 
 // Get weather based on user's location (via geolocation API)
 function getWeatherByLocation() {
+    const loader = document.getElementById('loader');
+    loader.style.display = 'block'; // Show a loading indicator
+
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
             const lat = position.coords.latitude;
@@ -56,12 +70,15 @@ function getWeatherByLocation() {
                 .then(response => response.json())
                 .then(data => {
                     displayWeather(data); // Display weather for user's location
+                    loader.style.display = 'none'; // Hide loading indicator
                 })
                 .catch(error => {
+                    loader.style.display = 'none'; // Hide loading indicator
                     alert('Could not fetch weather data. Please try again.');
-                    console.error(error);
+                    console.error('Error fetching weather data:', error);
                 });
         }, error => {
+            loader.style.display = 'none'; // Hide loading indicator
             // Handle the case when the user denies geolocation
             if (error.code === error.PERMISSION_DENIED) {
                 alert('Geolocation permission denied.');
@@ -70,9 +87,22 @@ function getWeatherByLocation() {
             }
         });
     } else {
+        loader.style.display = 'none'; // Hide loading indicator
         alert('Geolocation is not supported by this browser.');
     }
 }
 
 // Get weather on page load by location
-window.onload = getWeatherByLocation;
+window.onload = function () {
+    const loader = document.getElementById('loader');
+    loader.style.display = 'block'; // Show loading indicator when page loads
+    getWeatherByLocation();
+}
+
+// Add event listener to allow searching by city name
+document.getElementById('search-btn').addEventListener('click', function() {
+    const cityInput = document.getElementById('city').value;
+    if (cityInput) {
+        getWeatherByCity(); // Get weather by city name when search button is clicked
+    }
+});
