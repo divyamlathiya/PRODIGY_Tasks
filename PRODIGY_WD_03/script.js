@@ -1,202 +1,116 @@
 const TicTac = {
-    cPlayer: "X",
-    state: Array(9).fill(null),
-    gameOver: false,
-    scores: { X: 0, O: 0, tie: 0 },
-    difficulty: "medium",
-    mode: "friend", // friend mode by default
+    cPlayer: "X", // Tracks current player (X or O)
+    state: Array(9).fill(null), // Board state (null for empty cells)
+    gameOver: false, // Indicates if the game is over
 
+    // Initialize the game
     init() {
         this.cBoard();
-        document.getElementById("reset").addEventListener("click", () => this.reset());
-        document.getElementById("friendMode").addEventListener("click", () => this.setMode("friend"));
-        document.getElementById("aiMode").addEventListener("click", () => this.setMode("ai"));
-        this.updateScoreboard();
+        document
+            .getElementById("reset")
+            .addEventListener("click", () => this.reset());
+        this.updateTurnButtons(); // Ensure the turn buttons are set correctly
     },
 
-    setMode(mode) {
-        this.mode = mode;
-        this.gameOver = false;
-        this.state = Array(9).fill(null);
-        this.cPlayer = "X";
-        this.cBoard();
-        document.getElementById("turnButton").textContent = "Player X's turn";
-        this.updateTurnIndicator();
-        document.getElementById("friendMode").style.backgroundColor = mode === "friend" ? "black" : "";
-        document.getElementById("aiMode").style.backgroundColor = mode === "ai" ? "black" : "";
-    },
-
+    // Create the game board dynamically
     cBoard() {
         const board = document.getElementById("board");
-        board.innerHTML = "";
+        board.innerHTML = ""; // Clear previous board
         this.state.forEach((_, i) => {
             const cell = document.createElement("div");
             cell.classList.add("cell");
             cell.dataset.index = i;
             board.appendChild(cell);
         });
-        board.addEventListener("click", e => this.handleClick(e));
+        board.addEventListener("click", (e) => this.handleClick(e)); // Handle clicks on the board
         this.uMessage(`Player ${this.cPlayer}'s turn`);
     },
 
+    // Handle a cell click
     handleClick(e) {
         const cell = e.target;
         const i = cell.dataset.index;
-        if (this.gameOver || this.state[i]) return;
 
+        // Ignore clicks if game is over or cell is taken
+        if (this.gameOver || !cell.classList.contains("cell") || this.state[i])
+            return;
+
+        // Update board state and UI
         this.state[i] = this.cPlayer;
         cell.textContent = this.cPlayer;
         cell.classList.add("taken");
 
+        // Check for winner or tie
         const winCombo = this.checkWin();
         if (winCombo) {
             this.highlight(winCombo);
             this.uMessage(`Player ${this.cPlayer} wins!`);
-            this.scores[this.cPlayer]++;
             this.gameOver = true;
-            this.updateTurnIndicator();
-        } else if (this.state.every(cell => cell)) {
+        } else if (this.state.every((cell) => cell)) {
             this.uMessage("It's a tie!");
-            this.scores.tie++;
             this.gameOver = true;
-            this.updateTurnIndicator();
         } else {
+            // Update the player turn buttons before switching players
+            this.updateTurnButtons();
+
+            // Switch players
             this.cPlayer = this.cPlayer === "X" ? "O" : "X";
             this.uMessage(`Player ${this.cPlayer}'s turn`);
-            this.updateTurnIndicator();
-            if (this.cPlayer === "O" && !this.gameOver && this.mode === "ai") {
-                this.computerMove();
-            }
         }
-        this.updateScoreboard();
     },
 
+    // Check if there's a winning combination
     checkWin() {
         const wins = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],
-            [0, 4, 8], [2, 4, 6]
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8], // Rows
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8], // Columns
+            [0, 4, 8],
+            [2, 4, 6], // Diagonals
         ];
-        return wins.find(combo => combo.every(i => this.state[i] === this.cPlayer));
+        return wins.find((combo) =>
+            combo.every((i) => this.state[i] === this.cPlayer)
+        );
     },
 
+    // Highlight winning cells
     highlight(combo) {
-        combo.forEach(i => document.getElementById("board").children[i].style.color = "red");
+        combo.forEach((i) => {
+            document.getElementById("board").children[i].style.color = "red";
+        });
     },
 
+    // Reset the game
     reset() {
         this.state = Array(9).fill(null);
         this.cPlayer = "X";
         this.gameOver = false;
         this.cBoard();
-        document.getElementById("turnButton").textContent = "Player X's turn";
-        this.updateTurnIndicator();
-        document.getElementById("friendMode").style.backgroundColor = "";
-        document.getElementById("aiMode").style.backgroundColor = "";
+        this.updateTurnButtons(); // Ensure the buttons reflect the start state
     },
 
+    // Update the game status message
     uMessage(msg) {
         document.getElementById("message").textContent = msg;
     },
 
-    updateTurnIndicator() {
-        const turnButton = document.getElementById("turnButton");
+    // Update the player turn buttons
+    updateTurnButtons() {
+        const playerXButton = document.getElementById("playerXTurn");
+        const playerOButton = document.getElementById("playerOTurn");
 
-        if (this.gameOver) {
-            turnButton.textContent = "Game Over";
-            turnButton.style.backgroundColor = "lightcoral";
+        if (this.cPlayer === "X") {
+            playerXButton.disabled = true;  // Disable Player X's button
+            playerOButton.disabled = false; // Enable Player O's button
         } else {
-            turnButton.textContent = `Player ${this.cPlayer}'s turn`;
-            if (this.cPlayer === "X") {
-                turnButton.style.backgroundColor = "#008080"; // Green for Player X
-            } else {
-                turnButton.style.backgroundColor = "#deb887"; // Blue for Player O
-            }
+            playerXButton.disabled = false; // Enable Player X's button
+            playerOButton.disabled = true;  // Disable Player O's button
         }
     },
-
-    updateScoreboard() {
-        document.getElementById("scoreX").textContent = `Player X: ${this.scores.X}`;
-        document.getElementById("scoreO").textContent = `Player O: ${this.scores.O}`;
-        document.getElementById("scoreTie").textContent = `Ties: ${this.scores.tie}`;
-    },
-
-    computerMove() {
-        setTimeout(() => {
-            const move = this[this.difficulty === "easy" ? "getRandomMove" : "getBestMove"]();
-            this.state[move] = "O";
-            document.querySelector(`[data-index="${move}"]`).textContent = "O";
-            document.querySelector(`[data-index="${move}"]`).classList.add("taken");
-
-            const winCombo = this.checkWin();
-            if (winCombo) {
-                this.highlight(winCombo);
-                this.uMessage("Player O wins!");
-                this.scores.O++;
-                this.gameOver = true;
-            } else if (this.state.every(cell => cell)) {
-                this.uMessage("It's a tie!");
-                this.scores.tie++;
-                this.gameOver = true;
-            } else {
-                this.cPlayer = "X";
-                this.uMessage(`Player ${this.cPlayer}'s turn`);
-            }
-            this.updateScoreboard();
-            this.updateTurnIndicator();
-        }, 500);
-    },
-
-    getRandomMove() {
-        return this.state.filter((cell, i) => cell === null)[Math.floor(Math.random() * this.state.filter(cell => cell === null).length)];
-    },
-
-    getBestMove() {
-        let bestMove, bestScore = -Infinity;
-        this.state.forEach((cell, i) => {
-            if (cell === null) {
-                this.state[i] = "O";
-                const score = this.minimax(this.state, false);
-                this.state[i] = null;
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestMove = i;
-                }
-            }
-        });
-        return bestMove;
-    },
-
-    minimax(board, isMaximizing) {
-        const winner = this.checkWinner(board);
-        if (winner) return winner === "O" ? 1 : -1;
-        if (board.every(cell => cell)) return 0;
-
-        let bestScore = isMaximizing ? -Infinity : Infinity;
-        board.forEach((cell, i) => {
-            if (cell === null) {
-                board[i] = isMaximizing ? "O" : "X";
-                const score = this.minimax(board, !isMaximizing);
-                board[i] = null;
-                bestScore = isMaximizing ? Math.max(score, bestScore) : Math.min(score, bestScore);
-            }
-        });
-        return bestScore;
-    },
-
-    checkWinner(board) {
-        const wins = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],
-            [0, 4, 8], [2, 4, 6]
-        ];
-        for (const combo of wins) {
-            if (board[combo[0]] && board[combo[0]] === board[combo[1]] && board[combo[1]] === board[combo[2]]) {
-                return board[combo[0]];
-            }
-        }
-        return null;
-    }
 };
 
+// Start the game
 TicTac.init();
