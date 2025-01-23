@@ -58,7 +58,8 @@ button {
 }
 
 button:hover {
-    background-color: #008c99;
+    background-color: #077f8f;
+    transform: scale(1.1);
 }
 
 #lapTimes {
