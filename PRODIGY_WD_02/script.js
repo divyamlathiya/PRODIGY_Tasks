@@ -1,3 +1,7 @@
+
+javascript
+Copy
+// Initializes variables and selects DOM elements for stopwatch functionality
 let isRunning = false;
 let startTime = 0;
 let elapsedTime = 0;
