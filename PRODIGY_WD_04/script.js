@@ -1,3 +1,4 @@
+// Waits for the DOM to fully load before executing the script
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector("form");
     const submitButton = document.querySelector('button[type="submit"]');
