@@ -11,4 +11,4 @@
 **PRODIGY_WD_05**: Weather Web Application
 
 ---
-Author: **Divyam Lathiya**
+**Divyam Lathiya**
